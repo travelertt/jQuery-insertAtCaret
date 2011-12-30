@@ -9,7 +9,7 @@
  * Licensed under the GPL license:
  * http://www.gnu.org/licenses/gpl.html
  */
-;(function($) {
+(function($) {
 
 $.fn.insertAtCaret = function (myValue) {
 
@@ -19,7 +19,7 @@ $.fn.insertAtCaret = function (myValue) {
     if (document.selection) {
 
       this.focus();
-      sel = document.selection.createRange();
+      var sel = document.selection.createRange();
       
       if(Array.isArray(myValue)) {
         // Change functionality so that it wraps the new content
@@ -50,7 +50,7 @@ $.fn.insertAtCaret = function (myValue) {
 
     } else {
       if(Array.isArray(myValue)) {
-        this.value = myValue[0] + this.value + myValue[1]
+        this.value = myValue[0] + this.value + myValue[1];
       }
       else {
         this.value += myValue;
