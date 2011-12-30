@@ -13,34 +13,51 @@
 
 $.fn.insertAtCaret = function (myValue) {
 
-	return this.each(function() {
+  return this.each(function() {
 
-		//IE support
-		if (document.selection) {
+    //IE support
+    if (document.selection) {
 
-			this.focus();
-			sel = document.selection.createRange();
-			sel.text = myValue;
-			this.focus();
+      this.focus();
+      sel = document.selection.createRange();
+      
+      if(Array.isArray(myValue)) {
+        // Change functionality so that it wraps the new content
+        sel.text = myValue[0] + sel.text + myValue[1];
+      } 
+      else {
+        sel.text = myValue;
+      }
+      this.focus();
 
-		} else if (this.selectionStart || this.selectionStart == '0') {
+    } else if (this.selectionStart || this.selectionStart == '0') {
 
-			//MOZILLA / NETSCAPE support
-			var startPos = this.selectionStart;
-			var endPos = this.selectionEnd;
-			var scrollTop = this.scrollTop;
-			this.value = this.value.substring(0, startPos)+ myValue+ this.value.substring(endPos,this.value.length);
-			this.focus();
-			this.selectionStart = startPos + myValue.length;
-			this.selectionEnd = startPos + myValue.length;
-			this.scrollTop = scrollTop;
+      //MOZILLA / NETSCAPE support
+      var startPos = this.selectionStart;
+      var endPos = this.selectionEnd;
+      var scrollTop = this.scrollTop;
+      if(Array.isArray(myValue)) {
+        // Change functionality so that it wraps the new content
+        this.value = myValue[0] + this.value.substring(0, startPos)+ this.value.substring(endPos,this.value.length) + myValue[1];
+      }
+      else {
+        this.value = this.value.substring(0, startPos)+ myValue+ this.value.substring(endPos,this.value.length);
+      }
+      this.focus();
+      this.selectionStart = startPos + myValue.length;
+      this.selectionEnd = startPos + myValue.length;
+      this.scrollTop = scrollTop;
 
-		} else {
-
-			this.value += myValue;
-			this.focus();
-		}
-	});
+    } else {
+      if(Array.isArray(myValue)) {
+        this.value = myValue[0] + this.value + myValue[1]
+      }
+      else {
+        this.value += myValue;
+      }
+      this.focus();
+    }
+  });
 };
 
 })(jQuery);
